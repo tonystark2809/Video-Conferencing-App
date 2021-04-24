@@ -40,4 +40,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(3030); // Since we are going to use WEBRTC for peer to peer
+server.listen(process.envPORT || 3030); // Since we are going to use WEBRTC for peer to peer
