@@ -11,7 +11,7 @@ let text2 = $('#name_input');
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '3030'
+    port: '443'
 });
 
 console.log("Started Code");
