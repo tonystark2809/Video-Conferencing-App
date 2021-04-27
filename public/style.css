@@ -1,6 +1,11 @@
+#name_input {
+    border: none;
+}
+
 body {
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 
 #video-grid {
@@ -22,7 +27,7 @@ video {
 }
 
 .main__left {
-    flex: 0.8;
+    flex: 1;
     display: flex;
     flex-direction: column;
 }

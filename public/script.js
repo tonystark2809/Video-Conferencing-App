@@ -4,16 +4,20 @@ const videoGrid = document.getElementById('video-grid');
 const myVideo = document.createElement('video');
 myVideo.muted = true;
 
+var myModal = new bootstrap.Modal(document.getElementById('myModal'), { backdrop: false });
+myModal.toggle();
+let text2 = $('#name_input');
+
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '3030'
 });
 
 console.log("Started Code");
 let myVideoStream;
 
-navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(stream => {
+navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
     console.log("Added VideoStream");
@@ -35,20 +39,24 @@ navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(stream => {
         connectToNewUser(userId, stream);
     });
 
-    let text = $('input');
+    let text = $('#chat_message');
+
 
     $('html').keydown((e) => {
-        if (e.which == 13 && text.val().length !==0) {
-            socket.emit('message', text.val());
+        if (e.which == 13 && text.val().length !== 0) {
+            let message = { user: text2.val(), content: text.val() };
+            socket.emit('message', message);
             text.val('');
         }
     });
 
     socket.on('createMessage', message => {
         console.log(message);
-        $('.messages').append(`<li class="message"><b>user</b><br>${message}</li>`)
+        $('.messages').append(`<li class="message"><b>${message.user}</b><br>${message.content}</li>`)
         scrollToBottom();
     });
+}).catch(err => {
+    alert("Audio or Video not available");
 });
 
 
@@ -83,7 +91,7 @@ const scrollToBottom = () => {
 
 const muteUnmute = () => {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
-    if(enabled) {
+    if (enabled) {
         myVideoStream.getAudioTracks()[0].enabled = false;
         setUnmuteButton();
     } else {
@@ -110,7 +118,7 @@ const setMuteButton = () => {
 
 const playStop = () => {
     const enabled = myVideoStream.getVideoTracks()[0].enabled;
-    if(enabled) {
+    if (enabled) {
         myVideoStream.getVideoTracks()[0].enabled = false;
         setPlayVideo();
     } else {
